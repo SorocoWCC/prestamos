@@ -412,7 +412,7 @@
 
 		
 		<!-- Menu Principal --> 
-		<menuitem id="libroprestamo" name="Libro de Prestamos"/>
+		<menuitem id="libroprestamo" name="Prestamos"/>
 
 		<!-- Menu para prestamos Empleados --> 
 		<menuitem id="libroprestamo_menu_empleado" name="Prestamos Empleados" parent= "libroprestamo"/>
@@ -436,14 +436,6 @@
 				name="Libro Prestamos" 
 				parent="libro_prestamo_menu_pagar"
 				action="libro_prestamo_pagar_action"
-        />
-
-		<!-- Menu para Prueba -->
-		<menuitem id="libro_prestamo_menu_pagar_prueba" name="Prueba" parent= "libroprestamo"/> 
-		<menuitem id="libro_prestamo_pagar_menu_prueba" 
-				name="Libro Prestamos" 
-				parent="libro_prestamo_menu_pagar_prueba"
-				action="libroprueba_libro_action"
         />
 
 	</data>
