@@ -6,7 +6,6 @@
 
 	<data>
 
-
 <!-- Action para prestamos Prueba --> 
 		<record id="libroprueba_libro_action" model="ir.actions.act_window">
 		<field name="name">Lista de Prueba</field>
@@ -386,7 +385,7 @@
 			<search string="Libro">
 			<field  name="res_employee_id"/>
 			<group string="Agrupar Por">
-			<filter string="Cliente" name="res_partner_id" domain="[]" context="{'group_by':'res_partner_id'}"/>
+			<filter string="Empleado" name="res_employee_id" context="{'group_by':'res_employee_id'}" help="Agrupar por Empleado"/>
 			<filter string="Estado" name="state" domain="[]" context="{'group_by':'state'}"/>
 			</group>
 			</search>
@@ -408,7 +407,6 @@
 			</search>
 		</field>
 	</record>
-
 
 		
 		<!-- Menu Principal --> 

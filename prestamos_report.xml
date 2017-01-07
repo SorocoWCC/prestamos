@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <report 
+            string="Abono Empleado" 
+            id="custom_report_abono_empleado" 
+            model="empleado.allowance" 
+            report_type="qweb-pdf"
+            name="prestamos.report_abono_empleado_document" 
+            file="Abono Empleado" 
+        />  
+
+        <report 
+            string="Abono Cliente" 
+            id="custom_report_abono_cliente" 
+            model="cliente.allowance" 
+            report_type="qweb-pdf"
+            name="prestamos.report_abono_cliente_document" 
+            file="Abono Cliente" 
+        />
+
+        <record id="paperformat_lowmargin" model="report.paperformat">
+            <field name="name">European A4 low margin</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">4</field>
+            <field name="margin_left">4</field>
+            <field name="margin_right">4</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="prestamos.custom_report_abono_empleado" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="prestamos.paperformat_lowmargin" />
+        </record>
+      
+        <record id="prestamos.custom_report_abono_cliente" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="prestamos.paperformat_lowmargin" />
+        </record>
+
+    </data>
+</openerp>

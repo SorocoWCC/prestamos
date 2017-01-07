@@ -6,7 +6,9 @@
         Manejo de Prestamos""",
 
     'description': """
-        Manejo de Prestamos
+        Manejo de Prestamos Empleados
+        Manejo de Prestamos Clientes
+        Manejo de Prestamos Por Pagar
     """,
 
     'author': "Warren Castro",
@@ -26,6 +28,9 @@
         # 'security/ir.model.access.csv',
         'templates.xml',
         'prestamo_workflow.xml',
+        'prestamos_report.xml',       
+        'views/report_abono_empleado.xml',
+        'views/report_abono_cliente.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

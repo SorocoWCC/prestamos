@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <template id="report_abono_cliente_document">
+      <t t-foreach="docs" t-as="o">
+        <div class="page">
+          RECICLADORA SAN MIGUEL <br/>
+          San Jose - Costa Rica <br/>
+          Tel: 2277-1833 <br/>
+          www.recicladorasanmiguel.com <br/>
+          ------------------------- <br/>
+          Recibo de Dinero <br/>
+          Fecha del Abono: <br/>
+ 
+          Monto del Prestamo: <br/>
+          <span t-field="o.total_amortizable"/> <br/>   
+          ------------------------- <br/> 
+          Recibimos de: <br/>
+          <span t-field="o.res_partner_id"/> <br/>      
+          La suma de: <br/>
+          <span t-field="o.abono_ids.monto"/> <br/>   
+          Por concepto de: <br/>
+          Abono al prestamo <br/>
+          ********************* <br/>
+          Saldo: <br/>
+          <span t-field="o.saldo"/> <br/>  
+          ********************* <br/>
+
+
+          ________________ <br/>
+          Firma Cliente <br/>
+        </div>
+      </t>
+    </template>
+  </data>
+</openerp>
