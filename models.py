@@ -56,9 +56,9 @@ class empleado_allowance(models.Model):
     total_abono = fields.Float(compute='_total_abono_empleado', store=True, string="Total Abonos: ")
     saldo = fields.Float(compute='_saldo', store=True, string="Saldo: ")
     detalle = fields.Char(size=50, string="Detalle")
-    fecha_abono = fields.Char(size=50, string="Fecha Abono")
-    monto_abono = fields.Char(size=50, string="Monto Abono")
-    state = fields.Selection([('new','Abierto'), ('done','Cerrado')], string='Estado', readonly=True)
+    fecha_abono = fields.Char(compute='_total_abono_empleado', string="Fecha Abono", store=True)
+    monto_abono = fields.Float(compute='_total_abono_empleado', string="Monto Abono", store=True)
+    state = fields.Selection([('new','Abierto'), ('freeze','Incobrable'), ('done','Cerrado')], string='Estado', readonly=True)
     _defaults = { 
     'state': 'new',
     }
@@ -73,20 +73,20 @@ class empleado_allowance(models.Model):
 	self.total_amortizable= total
 
 # Total Abonos 
+
     @api.one
     @api.depends('abono_ids')
     def _total_abono_empleado(self):
-	total= 0
-	fecha_abono = "False"
-	monto_abono = "False"
-	for abono in self.abono_ids:
-		total += float(abono.monto)
-		fecha_abono = str(abono.fecha)
-		monto_abono = str(abono.monto)
-	self.total_abono= total
-	self.monto_abono = monto_abono
-	self.fecha_abono = fecha_abono
-
+        total= 0
+        fecha_abono = "False"
+        monto_abono = "False"
+        for abono in self.abono_ids:
+            total += float(abono.monto)
+            fecha_abono = str(abono.fecha)
+            monto_abono = str(abono.monto)
+        self.total_abono= total
+        self.monto_abono = monto_abono
+        self.fecha_abono = fecha_abono
 
 # Saldo
     @api.one
@@ -94,7 +94,15 @@ class empleado_allowance(models.Model):
     def _saldo(self):
 	self.saldo= self.total_amortizable - self.total_abono
 
+# Marca el prestamo como Incobrable
+    @api.one
+    def action_incobrable(self):
+        self.state = "freeze"
 
+# Marca el prestamo como Abierto
+    @api.one
+    def action_abierto(self):
+        self.state = "new"
 
 #----------------------------------------FIN PRESTAMO EMPLEADOS--------------------------------------------------------------------#
 
@@ -152,8 +160,8 @@ class cliente_allowance(models.Model):
     total_abono = fields.Float(compute='_total_abono_cliente', store=True, string="Total Abonos: ")
     saldo = fields.Float(compute='_saldo', store=True, string="Saldo: ")
     detalle = fields.Char(size=50, string="Detalle")
-    fecha_abono = fields.Char(size=50, string="Fecha Abono")
-    monto_abono = fields.Char(size=50, string="Monto Abono")
+    fecha_abono = fields.Char(compute='_total_abono_cliente', string="Fecha Abono", store=True)
+    monto_abono = fields.Char(compute='_total_abono_cliente', string="Monto Abono", store=True)
     state = fields.Selection([('new','Abierto'), ('done','Cerrado')], string='Estado', readonly=True)
     _defaults = { 
     'state': 'new',
