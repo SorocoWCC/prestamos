@@ -247,7 +247,7 @@ class cliente_allowance(models.Model):
     _name = "pagar.allowance"
     _description = "Pagar Allowance"
     res_partner_id = fields.Many2one(comodel_name='res.partner', string='Cliente', delegate=True)
-    amortizable_ids = fields.One2many(comodel_name='cliente.amortizable', inverse_name='libro_id', string="Amortizables")
+    amortizable_ids = fields.One2many(comodel_name='pagar.amortizable', inverse_name='libro_id', string="Amortizables")
     abono_ids = fields.One2many(comodel_name='pagar.abono',inverse_name='libro_id', string="Abonos")
     total_amortizable = fields.Float(compute='_total_amortizable_pagar', store=True, string="Total Prestamo: ")
     total_abono = fields.Float(compute='_total_abono_pagar', store=True, string="Total Abonos: ")
@@ -294,29 +294,7 @@ class cliente_allowance(models.Model):
 
 #----------------------------------------FIN PRESTAMO POR PAGAR--------------------------------------------------------------------#
 
-# Libro Prestamo por Pagar
-class libro(models.Model):
-    _name = "libro"
-    _description = "Libro"
-    campo_hoja = fields.Char(size=50, string="Campo")
-    rama = fields.Char(size=50, string="Campo")
-    hoja_ids = fields.One2many(comodel_name='hoja',inverse_name='libro_id', string="Abonos")
 
-# Agregar linea Pedido Cobre
-    @api.one
-    def action_test(self):
-	res= self.env['cliente.allowance'].search([('res_partner_id', '=', 'Warren Castro')])
-	print "------------------> " + str(res)
-	res.abono_ids.create({'name':'ware','libro_id':188, 'monto':6969})
-    	self.hoja_ids.create({'libro_id' : self.id, 'campito':'Campito'})
-
-
-# Hoja
-class hoja(models.Model):
-    _name = "hoja"
-    _description = "Libro"
-    campito = fields.Char(size=50, string="Zapato")
-    libro_id = fields.Many2one(comodel_name='libro', string='Libro', delegate=True)
 
 
 

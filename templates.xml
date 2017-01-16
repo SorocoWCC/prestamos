@@ -6,17 +6,6 @@
 
 	<data>
 
-<!-- Action para prestamos Prueba --> 
-		<record id="libroprueba_libro_action" model="ir.actions.act_window">
-		<field name="name">Lista de Prueba</field>
-     	<field name="res_model">libro</field>
-		<field name="view_type">form</field>
-		<field name="view_mode">tree,form</field>
-		<field name="help" type="html">
-			<p class="oe_view_nocontent_create">Presione aquí para crear un nuevo libro de prestamos para empleados.</p>
-		</field>
-		</record>
-
 <!-- Action para prestamos Empleados --> 
 		<record id="libroprestamoempleado_libro_action" model="ir.actions.act_window">
 		<field name="name">Lista de Prestamos</field>
@@ -74,37 +63,6 @@
 		</field>
 		</record>
 	
-
-<!-- Form view  Test libro --> 
-	<record id="prestamo_libro_form_view" model="ir.ui.view">
-		<field name="name">libro.amortizable.empleado.form.view</field>
-		<field name="view_type">form</field>
-		<field name="model">libro</field>
-		<field name="arch" type="xml">
-			<form string="Amortizable">
-			<field  name="hoja_ids" string="Fecha"/>
-			<field  name="campo_hoja"/>
-			<button name="action_test" type="object" class="oe_inline oe_stat_button" icon="fa-camera" string="Nuevo"/>
-
-            </form>
-		</field>
-	</record>
-
-<!-- Form view  Test Hoja --> 
-	<record id="prestamo_hoja_form_view" model="ir.ui.view">
-		<field name="name">hoja.amortizable.empleado.form.view</field>
-		<field name="view_type">form</field>
-		<field name="model">hoja</field>
-		<field name="arch" type="xml">
-			<form string="Amortizable">
-			<field  name="campito" string="campito"/>
-			<field  name="libro_id"/>
-
-            </form>
-		</field>
-	</record>
-
-
 <!-- Form view amortizable prestamo Empleado --> 
 	<record id="prestamo_amortizable_empleado_form_view" model="ir.ui.view">
 		<field name="name">prestamo.amortizable.empleado.form.view</field>
