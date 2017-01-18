@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
   <data>
-    <template id="report_abono_empleado_document">
+    <template id="report_abono_pagar_document">
       <t t-foreach="docs" t-as="o">
         <div class="page">
           RECICLADORA SAN MIGUEL <br/>
@@ -16,7 +16,7 @@
           <span t-field="o.total_amortizable"/> <br/>   
           ------------------------- <br/> 
           Recibimos de: <br/>
-          <span t-field="o.res_employee_id"/> <br/>      
+          Gerardo Castro Campos <br/>      
           La suma de: <br/>
           <span t-field="o.monto_abono"/> <br/>   
           Por concepto de: <br/>
@@ -34,4 +34,3 @@
     </template>
   </data>
 </openerp>
-

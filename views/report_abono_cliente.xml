@@ -18,7 +18,7 @@
           Recibimos de: <br/>
           <span t-field="o.res_partner_id"/> <br/>      
           La suma de: <br/>
-          <span t-field="o.abono_ids.monto"/> <br/>   
+          <span t-field="o.monto_abono"/> <br/>   
           Por concepto de: <br/>
           Abono al prestamo <br/>
           ********************* <br/>

@@ -30,7 +30,8 @@
         'prestamo_workflow.xml',
         'prestamos_report.xml',       
         'views/report_abono_empleado.xml',
-        'views/report_abono_cliente.xml'
+        'views/report_abono_cliente.xml',
+        'views/report_abono_pagar.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -24,7 +24,7 @@ class empleado_abono(models.Model):
     @api.one
     @api.depends('monto')
     def _action_responsable(self):
-	self.responsable = str(self.env.user.name)
+        self.responsable = str(self.env.user.name)
 
 #  Prestamo - Amortizable - Empleado
 class empleado_amortizable(models.Model):
@@ -43,7 +43,7 @@ class empleado_amortizable(models.Model):
     @api.one
     @api.depends('monto')
     def _action_responsable(self):
-	self.responsable = str(self.env.user.name)
+        self.responsable = str(self.env.user.name)
 
 # Libro Prestamo Empleado
 class empleado_allowance(models.Model):
@@ -67,10 +67,10 @@ class empleado_allowance(models.Model):
     @api.one
     @api.depends('amortizable_ids')
     def _total_amortizable_empleado(self):
-	total= 0
-	for prestamo in self.amortizable_ids:
-		total += float(prestamo.monto)
-	self.total_amortizable= total
+        total= 0
+        for prestamo in self.amortizable_ids:
+            total += float(prestamo.monto)
+        self.total_amortizable= total
 
 # Total Abonos 
 
@@ -78,8 +78,8 @@ class empleado_allowance(models.Model):
     @api.depends('abono_ids')
     def _total_abono_empleado(self):
         total= 0
-        fecha_abono = "False"
-        monto_abono = "False"
+        fecha_abono = 0
+        monto_abono = 0
         for abono in self.abono_ids:
             total += float(abono.monto)
             fecha_abono = str(abono.fecha)
@@ -92,7 +92,7 @@ class empleado_allowance(models.Model):
     @api.one
     @api.depends('abono_ids', 'amortizable_ids')
     def _saldo(self):
-	self.saldo= self.total_amortizable - self.total_abono
+        self.saldo= self.total_amortizable - self.total_abono
 
 # Marca el prestamo como Incobrable
     @api.one
@@ -128,7 +128,7 @@ class cliente_abono(models.Model):
     @api.one
     @api.depends('monto')
     def _action_responsable(self):
-	self.responsable = str(self.env.user.name)
+        self.responsable = str(self.env.user.name)
 
 #  Prestamo - Amortizable - cliente
 class cliente_amortizable(models.Model):
@@ -147,7 +147,7 @@ class cliente_amortizable(models.Model):
     @api.one
     @api.depends('monto')
     def _action_responsable(self):
-	self.responsable = str(self.env.user.name)
+        self.responsable = str(self.env.user.name)
 
 # Libro Prestamo cliente
 class cliente_allowance(models.Model):
@@ -172,32 +172,32 @@ class cliente_allowance(models.Model):
     @api.one
     @api.depends('amortizable_ids')
     def _total_amortizable_cliente(self):
-	total= 0
-	for prestamo in self.amortizable_ids:
-		total += float(prestamo.monto)
-	self.total_amortizable= total
+        total= 0
+        for prestamo in self.amortizable_ids:
+            total += float(prestamo.monto)
+        self.total_amortizable= total
 
 # Total Abonos 
     @api.one
     @api.depends('abono_ids')
     def _total_abono_cliente(self):
-	total= 0
-	fecha_abono = "False"
-	monto_abono = "False"
-	for abono in self.abono_ids:
-		total += float(abono.monto)
-		fecha_abono = str(abono.fecha)
-		monto_abono = str(abono.monto)
+        total= 0
+        fecha_abono = 0
+        monto_abono = 0
+        for abono in self.abono_ids:
+            total += float(abono.monto)
+            fecha_abono = str(abono.fecha)
+            monto_abono = str(abono.monto)
 
-	self.total_abono= total
-	self.monto_abono = monto_abono
-	self.fecha_abono = fecha_abono
+        self.total_abono= total
+        self.monto_abono = monto_abono
+        self.fecha_abono = fecha_abono
 
 # Saldo
     @api.one
     @api.depends('abono_ids', 'amortizable_ids')
     def _saldo(self):
-	self.saldo= self.total_amortizable - self.total_abono
+        self.saldo= self.total_amortizable - self.total_abono
 
 
 #----------------------------------------FIN PRESTAMO CLIENTES--------------------------------------------------------------------#
@@ -221,7 +221,7 @@ class pagar_abono(models.Model):
     @api.one
     @api.depends('monto')
     def _action_responsable(self):
-	self.responsable = str(self.env.user.name)
+        self.responsable = str(self.env.user.name)
 
 #  Prestamo - Amortizable - Por Pagar
 class pagar_amortizable(models.Model):
@@ -240,7 +240,7 @@ class pagar_amortizable(models.Model):
     @api.one
     @api.depends('monto')
     def _action_responsable(self):
-	self.responsable = str(self.env.user.name)
+        self.responsable = str(self.env.user.name)
 
 # Libro Prestamo por Pagar
 class cliente_allowance(models.Model):
@@ -254,7 +254,7 @@ class cliente_allowance(models.Model):
     saldo = fields.Float(compute='_saldo', store=True, string="Saldo: ")
     detalle = fields.Char(size=50, string="Detalle")
     fecha_abono = fields.Char(size=50, string="Fecha Abono")
-    monto_abono = fields.Char(size=50, string="Monto Abono")
+    monto_abono = fields.Char(compute='_total_abono_pagar', string="Monto Abono", store=True)
     state = fields.Selection([('new','Abierto'), ('done','Cerrado')], string='Estado', readonly=True)
     _defaults = { 
     'state': 'new',
@@ -264,40 +264,32 @@ class cliente_allowance(models.Model):
     @api.one
     @api.depends('amortizable_ids')
     def _total_amortizable_pagar(self):
-	total= 0
-	for prestamo in self.amortizable_ids:
-		total += float(prestamo.monto)
-	self.total_amortizable= total
+        total= 0
+        for prestamo in self.amortizable_ids:
+            total += float(prestamo.monto)
+        self.total_amortizable= total
 
 # Total Abonos 
     @api.one
     @api.depends('abono_ids')
     def _total_abono_pagar(self):
-	total= 0
-	fecha_abono = "False"
-	monto_abono = "False"
-	for abono in self.abono_ids:
-		total += float(abono.monto)
-		fecha_abono = str(abono.fecha)
-		monto_abono = str(abono.monto)
+        total= 0
+        fecha_abono = 0
+        monto_abono = 0
+        for abono in self.abono_ids:
+            total += float(abono.monto)
+            fecha_abono = str(abono.fecha)
+            monto_abono = str(abono.monto)
 
-	self.total_abono= total
-	self.monto_abono = monto_abono
-	self.fecha_abono = fecha_abono
+        self.total_abono= total
+        self.monto_abono = monto_abono
+        self.fecha_abono = fecha_abono
 
 # Saldo
     @api.one
     @api.depends('abono_ids', 'amortizable_ids')
     def _saldo(self):
-	self.saldo= self.total_amortizable - self.total_abono
+        self.saldo= self.total_amortizable - self.total_abono
 
 
 #----------------------------------------FIN PRESTAMO POR PAGAR--------------------------------------------------------------------#
-
-
-
-
-
-
-
-

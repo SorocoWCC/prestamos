@@ -20,6 +20,16 @@
             file="Abono Cliente" 
         />
 
+        <report 
+            string="Abono Prestamo Por Pagar" 
+            id="custom_report_abono_pagar" 
+            model="pagar.allowance" 
+            report_type="qweb-pdf"
+            name="prestamos.report_abono_pagar_document" 
+            file="Abono Pagar" 
+        />
+
+
         <record id="paperformat_lowmargin" model="report.paperformat">
             <field name="name">European A4 low margin</field>
             <field name="default" eval="True" />
@@ -41,6 +51,10 @@
         </record>
       
         <record id="prestamos.custom_report_abono_cliente" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="prestamos.paperformat_lowmargin" />
+        </record>
+
+        <record id="prestamos.custom_report_abono_pagar" model="ir.actions.report.xml">
             <field name="paperformat_id" ref="prestamos.paperformat_lowmargin" />
         </record>
 
