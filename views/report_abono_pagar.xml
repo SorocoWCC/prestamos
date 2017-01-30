@@ -11,7 +11,7 @@
           ------------------------- <br/>
           Recibo de Dinero <br/>
           Fecha del Abono: <br/>
- 
+          <span t-field="o.fecha_abono"/>  <br/>   
           Monto del Prestamo: <br/>
           <span t-field="o.total_amortizable"/> <br/>   
           ------------------------- <br/> 
