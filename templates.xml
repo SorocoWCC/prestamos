@@ -104,7 +104,6 @@
 	</record>
 
 
-
 <!-- Form View prestamo Empleado --> 
 	<record id="prestamoempleado_libro_form_view" model="ir.ui.view">
 		<field name="name">prestamo.libro.empleado.form.view</field>
@@ -113,13 +112,11 @@
 		<field name="arch" type="xml">
 	<form string="Libro"  version="7.0">
 	<header>
-     		<button name="mymod_assigned" string="Primer Paso" states="nada" class="oe_highlight" type="workflow" />
-      		<button name="mymod_assigned" string="Procesado" states="new" class="oe_highlight" type="workflow" />
-      		<button name="action_incobrable" string="Incobrable" type="object" attrs="{'invisible': [('state','in',('done', 'freeze'))]}" class="oe_highlight" />
+      		<button name="action_procesado" string="Procesado" type="object" attrs="{'invisible': [('state','in',('done','freeze'))]}" class="oe_highlight" />
+      		<button name="action_incobrable" string="Incobrable" type="object" attrs="{'invisible': [('state','in',('done', 'freeze'))]}" />
       		<button name="action_abierto" string="Re-Abrir" type="object" attrs="{'invisible': [('state','in',('done', 'new'))]}" class="oe_highlight" />
- 		<field name="state" widget="statusbar"  statusbar_colors='{"new":"blue","done":"red"}'/>
-     
-         </header>
+ 			<field name="state" widget="statusbar"  statusbar_colors='{"new":"blue","done":"red"}'/>
+     </header>
 	 <sheet string="Libro de Prestamos"> 
 			<group>
 			 <label for="name"/>
@@ -170,11 +167,11 @@
 		<field name="arch" type="xml">
 	<form string="Libro"  version="7.0">
 	<header>
-     		<button name="mymod_assigned" string="Primer Paso" states="nada" class="oe_highlight" type="workflow" />
-      		<button name="mymod_assigned" string="Procesado" states="new" class="oe_highlight" type="workflow" />
- 		<field name="state" widget="statusbar"  statusbar_colors='{"new":"blue","done":"red"}'/>
-     
-         </header>
+		<button name="action_procesado" string="Procesado" type="object" attrs="{'invisible': [('state','in',('done','freeze'))]}" class="oe_highlight" />
+ 		<button name="action_incobrable" string="Incobrable" type="object" attrs="{'invisible': [('state','in',('done', 'freeze'))]}" />
+      	<button name="action_abierto" string="Re-Abrir" type="object" attrs="{'invisible': [('state','in',('done', 'new'))]}" class="oe_highlight" />
+      	<field name="state" widget="statusbar"  statusbar_colors='{"new":"blue","done":"red"}'/>
+    </header>
 	 <sheet string="Libro de Prestamos"> 
 			<group>
 			 <label for="name"/>
@@ -226,8 +223,7 @@
 		<field name="arch" type="xml">
 	<form string="Libro"  version="7.0">
 	<header>
-     		<button name="mymod_assigned" string="Primer Paso" states="nada" class="oe_highlight" type="workflow" />
-      		<button name="mymod_assigned" string="Procesado" states="new" class="oe_highlight" type="workflow" />
+      	<button name="action_procesado" string="Procesado" type="object" attrs="{'invisible': [('state','in',('done','freeze'))]}" class="oe_highlight" />
  		<field name="state" widget="statusbar"  statusbar_colors='{"new":"blue","done":"red"}'/>
      
          </header>

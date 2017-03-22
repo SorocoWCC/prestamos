@@ -27,7 +27,6 @@
     'data': [
         # 'security/ir.model.access.csv',
         'templates.xml',
-        'prestamo_workflow.xml',
         'prestamos_report.xml',       
         'views/report_abono_empleado.xml',
         'views/report_abono_cliente.xml',

@@ -73,7 +73,6 @@ class empleado_allowance(models.Model):
         self.total_amortizable= total
 
 # Total Abonos 
-
     @api.one
     @api.depends('abono_ids')
     def _total_abono_empleado(self):
@@ -84,6 +83,7 @@ class empleado_allowance(models.Model):
             total += float(abono.monto)
             fecha_abono = str(abono.fecha)
             monto_abono = str(abono.monto)
+
         self.total_abono= total
         self.monto_abono = monto_abono
         self.fecha_abono = fecha_abono
@@ -92,12 +92,25 @@ class empleado_allowance(models.Model):
     @api.one
     @api.depends('abono_ids', 'amortizable_ids')
     def _saldo(self):
-        self.saldo= self.total_amortizable - self.total_abono
+        # Valida que el monto del abono no exceda el saldo
+        if self.total_abono <= self.total_amortizable :
+            self.saldo= self.total_amortizable - self.total_abono
+        else:
+           raise Warning ("Error: El abono excede el monto del saldo")  
+
 
 # Marca el prestamo como Incobrable
     @api.one
     def action_incobrable(self):
         self.state = "freeze"
+
+# Marca el prestamo como cerrado
+    @api.one
+    def action_procesado(self):
+        if self.saldo <= 0 :
+            self.state = "done"
+        else :
+            raise Warning ("Error: El préstamo no se puede cerrar ya que tiene saldo activo.") 
 
 # Marca el prestamo como Abierto
     @api.one
@@ -161,8 +174,8 @@ class cliente_allowance(models.Model):
     saldo = fields.Float(compute='_saldo', store=True, string="Saldo: ")
     detalle = fields.Char(size=50, string="Detalle")
     fecha_abono = fields.Char(compute='_total_abono_cliente', string="Fecha Abono", store=True)
-    monto_abono = fields.Char(compute='_total_abono_cliente', string="Monto Abono", store=True)
-    state = fields.Selection([('new','Abierto'), ('done','Cerrado')], string='Estado', readonly=True)
+    monto_abono = fields.Float(compute='_total_abono_cliente', string="Monto Abono", store=True)
+    state = fields.Selection([('new','Abierto'), ('freeze','Incobrable'), ('done','Cerrado')], string='Estado', readonly=True)
     _defaults = { 
     'state': 'new',
     }
@@ -197,8 +210,29 @@ class cliente_allowance(models.Model):
     @api.one
     @api.depends('abono_ids', 'amortizable_ids')
     def _saldo(self):
-        self.saldo= self.total_amortizable - self.total_abono
+        # Valida que el monto del abono no exceda el saldo
+        if self.total_abono <= self.total_amortizable :
+            self.saldo= self.total_amortizable - self.total_abono
+        else:
+           raise Warning ("Error: El abono excede el monto del saldo") 
 
+# Marca el prestamo como Incobrable
+    @api.one
+    def action_incobrable(self):
+        self.state = "freeze"
+
+# Marca el prestamo como cerrado
+    @api.one
+    def action_procesado(self):
+        if self.saldo <= 0 :
+            self.state = "done"
+        else :
+            raise Warning ("Error: El préstamo no se puede cerrar ya que tiene saldo activo.") 
+
+# Marca el prestamo como Abierto
+    @api.one
+    def action_abierto(self):
+        self.state = "new"
 
 #----------------------------------------FIN PRESTAMO CLIENTES--------------------------------------------------------------------#
 
@@ -254,7 +288,7 @@ class cliente_allowance(models.Model):
     saldo = fields.Float(compute='_saldo', store=True, string="Saldo: ")
     detalle = fields.Char(size=50, string="Detalle")
     fecha_abono = fields.Char(size=50, string="Fecha Abono")
-    monto_abono = fields.Char(compute='_total_abono_pagar', string="Monto Abono", store=True)
+    monto_abono = fields.Float(compute='_total_abono_pagar', string="Monto Abono", store=True)
     state = fields.Selection([('new','Abierto'), ('done','Cerrado')], string='Estado', readonly=True)
     _defaults = { 
     'state': 'new',
@@ -289,7 +323,19 @@ class cliente_allowance(models.Model):
     @api.one
     @api.depends('abono_ids', 'amortizable_ids')
     def _saldo(self):
-        self.saldo= self.total_amortizable - self.total_abono
+        # Valida que el monto del abono no exceda el saldo
+        if self.total_abono <= self.total_amortizable :
+            self.saldo= self.total_amortizable - self.total_abono
+        else:
+           raise Warning ("Error: El abono excede el monto del saldo") 
+
+# Marca el prestamo como cerrado
+    @api.one
+    def action_procesado(self):
+        if self.saldo <= 0 :
+            self.state = "done"
+        else :
+            raise Warning ("Error: El préstamo no se puede cerrar ya que tiene saldo activo.") 
 
 
 #----------------------------------------FIN PRESTAMO POR PAGAR--------------------------------------------------------------------#

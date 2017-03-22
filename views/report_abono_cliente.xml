@@ -4,31 +4,115 @@
     <template id="report_abono_cliente_document">
       <t t-foreach="docs" t-as="o">
         <div class="page">
-          RECICLADORA SAN MIGUEL <br/>
-          San Jose - Costa Rica <br/>
-          Tel: 2277-1833 <br/>
-          www.recicladorasanmiguel.com <br/>
-          ------------------------- <br/>
-          Recibo de Dinero <br/>
-          Fecha del Abono: <br/>
-          <span t-field="o.fecha_abono"/>  <br/>   
-          Monto del Prestamo: <br/>
-          <span t-field="o.total_amortizable"/> <br/>   
-          ------------------------- <br/> 
-          Recibimos de: <br/>
-          <span t-field="o.res_partner_id"/> <br/>      
-          La suma de: <br/>
-          <span t-field="o.monto_abono"/> <br/>   
-          Por concepto de: <br/>
-          Abono al prestamo <br/>
-          ********************* <br/>
-          Saldo: <br/>
-          <span t-field="o.saldo"/> <br/>  
-          ********************* <br/>
+          <style type="text/css">
+                    h4 {
+                        font-weight:bold;
+                    }
 
+                    h5, h6 {
+                        margin-top: 2px;
+                        margin-bottom: 4px;
+                    }
 
-          ________________ <br/>
-          Firma Cliente <br/>
+                    .ticket-body {
+                        overflow: hidden;
+                    }
+
+                    .ticket-container {
+                        width: 240px;
+                    }
+
+                    .ticket-container .ticket-body table.ticket-header {
+                        margin-top:20px;
+                        width: 100%;
+                    }
+
+                    .ticket-container .ticket-body table.ticket-header td {
+                        text-align: left;
+                    }
+
+                    .ticket-container .ticket-body table.product-table {
+                        margin-top: 20px;
+                        width: 100%;
+                    }
+
+                    .ticket-container .ticket-body table.product-table tr td{
+                        margin-top: 20px;
+                        width: 50%;
+                    }
+
+                    .ticket-container .ticket-body table.product-table tr td:first-child {
+                        text-align: left;
+                    }
+
+                    .ticket-container .ticket-body table.product-table tr td:last-child {
+                        text-align: right;
+                    }
+
+                    .ticket-container .ticket-body .ticket-footer h4 {
+                        margin-bottom: 0px;
+                    }
+
+                    .ticket-container .ticket-body .ticket-footer h4 {
+                        font-weight: bold;
+                    }
+          </style>
+
+          <div class="row">
+            <div class="container ticket-container">
+              <div class="ticket-heading text-center">
+                  <h4 style="font-weight:bold;">Recicladora San Miguel</h4>
+                  <h5>Teléfono: 2275-1833</h5>
+                  <h6>Sitio web:</h6>    
+                  <h5>www.recicladorasanmiguel.com</h5>
+              </div>
+              <div class="ticket-body">
+                  <table class="ticket-header">
+                      <tr>
+                        <th class="text-center" colspan="2">Recibo de Dinero</th>
+                      </tr>
+                      <tr>
+                        <td>Fecha: </td>
+                        <td><span class="oe_editable" t-field="o.fecha_abono"/><br/></td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"> Monto del Prestamo: </td>
+                      </tr>
+                        <td colspan="2"> ₡ <t t-esc="'{0:,.2f}'.format(int(o.total_amortizable))"/> </td>
+                      <tr>
+                      </tr>
+                      <tr>
+                        <td>Recibimos de: </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><t t-esc="o.res_partner_id.name"/></td>
+                      </tr>
+                      <tr>
+                        <td>La suma de:</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"> ₡ <t t-esc="'{0:,.2f}'.format(int(o.monto_abono))"/> </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2">Por concepto de: </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"> Abono al préstamo</td>
+                      </tr>    
+                  </table>
+              
+                  <div class="ticket-footer text-center">
+                      <h4>Saldo: ₡ <t t-esc="'{0:,.2f}'.format(int(o.saldo))"/> </h4>
+                  </div>
+                  <div style="height: 50px; "> </div>
+                  <div style="text-align:center">
+                      ________________ <br/>
+                      Firma Cliente <br/>
+                  </div>
+              </div>
+
+          </div>
+          </div>
         </div>
       </t>
     </template>
