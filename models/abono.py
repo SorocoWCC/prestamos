@@ -28,6 +28,7 @@ class abono(models.Model):
     detalle = fields.Char(size=50, string="Detalle")
     fecha = fields.Date(string='Fecha', default=_get_date, readonly=True)
     monto = fields.Float(string='Monto', required=True)
+    saldo = fields.Float(string='Saldo')
     state = fields.Selection([('borrador','Borrador'), ('cerrado','Cerrado')], string='state', default="borrador")
 
     @api.one
@@ -41,6 +42,7 @@ class abono(models.Model):
         if self.prestamo_id.saldo == self.monto:
             self.prestamo_id.state = "cerrado"
 
+        self.saldo  = self .prestamo_id.saldo - self.monto        
         self.state = 'cerrado'
 
     @api.multi
