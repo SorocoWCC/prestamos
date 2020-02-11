@@ -3,34 +3,16 @@
     <data>
 
         <report 
-            string="Abono Empleado" 
-            id="custom_report_abono_empleado" 
-            model="empleado.allowance" 
+            string="Abono Prestamo" 
+            id="custom_report_abono" 
+            model="abono" 
             report_type="qweb-pdf"
-            name="prestamos.report_abono_empleado_document" 
-            file="Abono Empleado" 
-        />  
-
-        <report 
-            string="Abono Cliente" 
-            id="custom_report_abono_cliente" 
-            model="cliente.allowance" 
-            report_type="qweb-pdf"
-            name="prestamos.report_abono_cliente_document" 
-            file="Abono Cliente" 
+            name="prestamos.report_abono_document" 
+            file="Abono Prestamo" 
         />
 
-        <report 
-            string="Abono Prestamo Por Pagar" 
-            id="custom_report_abono_pagar" 
-            model="pagar.allowance" 
-            report_type="qweb-pdf"
-            name="prestamos.report_abono_pagar_document" 
-            file="Abono Pagar" 
-        />
-
-        <record id="paperformat_lowmargin" model="report.paperformat">
-            <field name="name">Punto de Venta</field>
+        <record id="paperformat_lowmargin_prestamos" model="report.paperformat">
+            <field name="name">Abono Prestamo</field>
             <field name="default" eval="True" />
             <field name="format">custom</field>
             <field name="page_height">150</field>
@@ -44,18 +26,8 @@
             <field name="header_spacing">0</field>
             <field name="dpi">90</field>
         </record>
-
-        <record id="prestamos.custom_report_abono_empleado" model="ir.actions.report.xml">
-            <field name="paperformat_id" ref="prestamos.paperformat_lowmargin" />
+        <record id="prestamos.custom_report_abono" model="ir.actions.report">
+            <field name="paperformat_id" ref="prestamos.paperformat_lowmargin_prestamos" />
         </record>
-      
-        <record id="prestamos.custom_report_abono_cliente" model="ir.actions.report.xml">
-            <field name="paperformat_id" ref="prestamos.paperformat_lowmargin" />
-        </record>
-
-        <record id="prestamos.custom_report_abono_pagar" model="ir.actions.report.xml">
-            <field name="paperformat_id" ref="prestamos.paperformat_lowmargin" />
-        </record>
-
     </data>
 </openerp>

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Manejo de  Prestamos",
+    'name': "San Miguel - Prestamos",
 
     'summary': """
-        Manejo de Prestamos""",
+        San Miguel - Prestamos""",
 
     'description': """
         Manejo de Prestamos Empleados
@@ -25,12 +25,9 @@
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
-        'templates.xml',
+        'views/prestamo.xml',
         'prestamos_report.xml',       
-        'views/report_abono_empleado.xml',
-        'views/report_abono_cliente.xml',
-        'views/report_abono_pagar.xml',
+        'views/report_abono.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
