@@ -21,13 +21,14 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'purchase','hr'],
+    'depends': ['base', 'cierre_caja', 'purchase', 'hr'],
 
     # always loaded
     'data': [
-        'views/prestamo.xml',
-        'prestamos_report.xml',       
-        'views/report_abono.xml'
+        'views/prestamo.xml',      
+        'views/purchase_order.xml',
+        'views/report_abono.xml',
+        'prestamos_report.xml' 
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <!-- Vista de formulario - Heredada - Purchase Order -->
+    <record id="prestamos_purchase_order_inherit_form_view" model="ir.ui.view">
+      <field name="name">Inherit Form View - Module: Prestamos - Object: Purchase Order</field>
+      <field name="model">purchase.order</field>
+      <field name="inherit_id" ref="purchase.purchase_order_form"/>
+      <field name="arch" type="xml">
+        <!-- Mostar Prestamo -->
+        <button name="action_take_picture" position="after">
+          <button attrs="{'invisible': [('prestamo_info','=','0')]}" class="oe_inline oe_stat_button" icon="fa-money" name="action_prestamo_info" type="action">
+            <field name="prestamo_info" widget="statinfo"/>
+          </button>
+        </button>
+      </field>
+    </record>
+  </data>
+</odoo>
