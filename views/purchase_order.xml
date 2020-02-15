@@ -9,7 +9,7 @@
       <field name="arch" type="xml">
         <!-- Mostar Prestamo -->
         <button name="action_take_picture" position="after">
-          <button attrs="{'invisible': [('prestamo_info','=','0')]}" class="oe_inline oe_stat_button" icon="fa-money" name="action_prestamo_info" type="action">
+          <button attrs="{'invisible': [('prestamo_info','=', 0)]}" class="oe_inline oe_stat_button" icon="fa-money" name="action_prestamo_info" type="action">
             <field name="prestamo_info" widget="statinfo"/>
           </button>
         </button>

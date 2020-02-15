@@ -22,18 +22,40 @@ class purchase_order(models.Model):
     # Marcar la factura como pagada y la asocia con los cierres de caja
     @api.multi
     def action_quotation_paid(self):
-        print("===========PRESTAMOS==============")
+        super().action_quotation_paid()
+        if self.prestamo_info > 0 :
+            prestamo= self.env['prestamo'].search([['tipo', '=', 'cliente'], ['state', '=', 'abierto'], ['cliente_id.id', '=', self.partner_id.id]])
+            for line in self.order_line:
+                if line.product_id.name == "Prestamo" and line.price_unit <= prestamo[0].saldo:
+                    # Valida que el monto del abono sea negativo para no pagar de mas al cliente
+                    if line.price_unit > 0 :
+                        raise Warning ("Error: El monto del abono al prestamo debe de ser negativo")
+                    else:
+                        # Realiza el abono al prestamo
+                        abono = prestamo.abono_ids.create({'detalle': self.name, 'monto': abs(line.price_unit), 'prestamo_id': prestamo.id})
+                        print(abono.monto)
+                        # Imprimir el abono al prestamo automaticamente
+                        return abono.env.ref('prestamos.custom_report_abono').report_action(abono)
+
+    
+    @api.multi
+    def button_confirm(self):
+        super(purchase_order, self).button_confirm()
+        if self.prestamo_info > 0 :
+            prestamo= self.env['prestamo'].search([['tipo', '=', 'cliente'], ['state', '=', 'abierto'], ['cliente_id.id', '=', self.partner_id.id]])
+            for line in self.order_line:
+                if line.product_id.name == "Prestamo" and line.price_unit > 0:
+                    # Valida que el monto del abono sea negativo para no pagar de mas al cliente
+                        raise Warning ("Error: El monto del abono al prestamo debe de ser negativo")
 
     # Agregar linea de prestamo en la orden de compra
     @api.one
     def action_take_picture(self):
         super().action_take_picture()
-        print("===========PICTURE==============")
-        print(self.prestamo_info)
         if self.prestamo_info > 0 and self.agregar_linea_prestamo == False:
             prestamo= self.env['prestamo'].search([['tipo', '=', 'cliente'], ['state', '=', 'abierto'], ['cliente_id.id', '=', self.partner_id.id]])
 
-            if prestamo :
+            if prestamo and self.agregar_linea_prestamo == False:
                 res= self.env['product.template'].search([['name', '=', 'Prestamo'], ['default_code', '=', 'PR']])
                 monto_abono = 0
                 if res.list_price > prestamo[0].saldo :
@@ -41,14 +63,12 @@ class purchase_order(models.Model):
                 else:
                     monto_abono = res.list_price
 
-                self.order_line.create({'product_id': str(res.id), 'price_unit':str(monto_abono), 'order_id' : self.id, 'name': '[PR] Prestamo','calcular': True, 'date_planned': str(fields.Date.today()), 'product_qty': 1, 'product_uom': str(res.uom_po_id.id)})
+                self.order_line.create({'product_id': str(res.id), 'price_unit':str(monto_abono), 'order_id' : self.id, 'name': '[PR] Prestamo','calcular': False, 'date_planned': str(fields.Date.today()), 'product_qty': 1, 'product_uom': str(res.uom_po_id.id)})
                 self.agregar_linea_prestamo = True
 
+    # Consultar si el proveedor tiene prestamo            
     @api.depends('partner_id')
     def _action_prestamo_info(self):
-        print("Action Prestamo")
         prestamo= self.env['prestamo'].search([['tipo', '=', 'cliente'], ['state', '=', 'abierto'], ['cliente_id.id', '=', self.partner_id.id]])
         if prestamo :
-            print("Hay prestamos")
             self.prestamo_info = prestamo[0].saldo
-            print(self.prestamo_info)
