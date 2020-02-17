@@ -14,6 +14,7 @@ class prestamo(models.Model):
     _description = "Prestamo"
     _inherit = 'mail.thread'
 
+    name = fields.Char(string="Nombre", store=True)
     empleado_id = fields.Many2one(comodel_name='hr.employee', string='Empleado')
     cliente_id = fields.Many2one(comodel_name='res.partner', string='Cliente')
     notas= fields.Text(string='Notas')
@@ -49,6 +50,12 @@ class prestamo(models.Model):
         if self.tipo == 'empleado' and not self.empleado_id:
             raise Warning ("Error: Por favor seleccione el empleado.")
 
+        # Asigna nombre al prestamos
+        if self.tipo in ('cliente', 'por_pagar'):
+            self.name = self.cliente_id.name
+        if self.tipo == 'empleado':
+            self.name = self.empleado_id.name       
+
     # Dinero de Abonos
     @api.one
     @api.depends('abono_ids')
@@ -80,9 +87,3 @@ class prestamo(models.Model):
         mensaje = "<p>Prestamo incobrable por : " + str(self.env.user.name) + " - " + datetime.now(timezone('America/Costa_Rica')).strftime("%Y-%m-%d %H:%M:%S") + "</p>"
         self.message_post(body=mensaje, content_subtype='html')
 
-    # Marcar prestamo como incobrable
-    @api.one
-    def action_incobrable(self): 
-        self.state = "cerrado"
-        mensaje = "<p>Prestamo incobrable por : " + str(self.env.user.name) + " - " + datetime.now(timezone('America/Costa_Rica')).strftime("%Y-%m-%d %H:%M:%S") + "</p>"
-        self.message_post(body=mensaje, content_subtype='html')
