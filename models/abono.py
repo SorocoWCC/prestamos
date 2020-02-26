@@ -41,8 +41,11 @@ class abono(models.Model):
 
         if self.prestamo_id.saldo == self.monto:
             self.prestamo_id.state = "cerrado"
-
-        self.saldo  = self .prestamo_id.saldo - self.monto        
+            self.prestamo_id.saldo = 0
+        else:
+            self.saldo  = self .prestamo_id.saldo - self.monto        
+       
+        # Estado del abono
         self.state = 'cerrado'
 
     @api.multi

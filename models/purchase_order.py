@@ -33,7 +33,6 @@ class purchase_order(models.Model):
                     else:
                         # Realiza el abono al prestamo
                         abono = prestamo.abono_ids.create({'detalle': self.name, 'monto': abs(line.price_unit), 'prestamo_id': prestamo.id})
-                        print(abono.monto)
                         # Imprimir el abono al prestamo automaticamente
                         return abono.env.ref('prestamos.custom_report_abono').report_action(abono)
 
@@ -58,12 +57,13 @@ class purchase_order(models.Model):
             if prestamo and self.agregar_linea_prestamo == False:
                 res= self.env['product.template'].search([['name', '=', 'Prestamo'], ['default_code', '=', 'PR']])
                 monto_abono = 0
-                if res.list_price > prestamo[0].saldo :
+
+                if abs(res.list_price) > prestamo[0].saldo :
                     monto_abono = prestamo[0].saldo
                 else:
                     monto_abono = res.list_price
 
-                self.order_line.create({'product_id': str(res.id), 'price_unit':str(monto_abono), 'order_id' : self.id, 'name': '[PR] Prestamo','calcular': False, 'date_planned': str(fields.Date.today()), 'product_qty': 1, 'product_uom': str(res.uom_po_id.id)})
+                self.order_line.create({'product_id': str(res.id), 'price_unit':str(-abs(monto_abono)), 'order_id' : self.id, 'name': '[PR] Prestamo','calcular': False, 'date_planned': str(fields.Date.today()), 'product_qty': 1, 'product_uom': str(res.uom_po_id.id)})
                 self.agregar_linea_prestamo = True
 
     # Consultar si el proveedor tiene prestamo            
