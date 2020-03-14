@@ -20,17 +20,6 @@ class purchase_order(models.Model):
     prestamo_total = fields.Float(compute='_action_prestamo_saldo', store=True, string="Monto Prestamo" )
     agregar_linea_prestamo = fields.Boolean(default=False)
 
-    
-    @api.multi
-    def button_confirm(self):
-        super(purchase_order, self).button_confirm()
-        if self.prestamo_saldo > 0 :
-            prestamo= self.env['prestamo'].search([['tipo', '=', 'cliente'], ['state', '=', 'abierto'], ['cliente_id.id', '=', self.partner_id.id]])
-            for line in self.order_line:
-                if line.product_id.name == "Prestamo" and line.price_unit > 0:
-                    # Valida que el monto del abono sea negativo para no pagar de mas al cliente
-                        raise Warning ("Error: El monto del abono al prestamo debe de ser negativo")
-
     # Agregar linea de prestamo en la orden de compra
     @api.one
     def action_take_picture(self):
