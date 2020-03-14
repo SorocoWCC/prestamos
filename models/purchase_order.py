@@ -16,31 +16,15 @@ class purchase_order(models.Model):
     _name = 'purchase.order'
     _inherit = 'purchase.order'
 
-    prestamo_info = fields.Float(compute='_action_prestamo_info', store=True, default=0, string="Prestamo" )
+    prestamo_saldo = fields.Float(compute='_action_prestamo_saldo', store=True, default=0, string="Prestamo" )
+    prestamo_total = fields.Float(compute='_action_prestamo_saldo', store=True, string="Monto Prestamo" )
     agregar_linea_prestamo = fields.Boolean(default=False)
-
-    # Marcar la factura como pagada y la asocia con los cierres de caja
-    @api.multi
-    def action_quotation_paid(self):
-        super().action_quotation_paid()
-        if self.prestamo_info > 0 :
-            prestamo= self.env['prestamo'].search([['tipo', '=', 'cliente'], ['state', '=', 'abierto'], ['cliente_id.id', '=', self.partner_id.id]])
-            for line in self.order_line:
-                if line.product_id.name == "Prestamo" and line.price_unit <= prestamo[0].saldo:
-                    # Valida que el monto del abono sea negativo para no pagar de mas al cliente
-                    if line.price_unit > 0 :
-                        raise Warning ("Error: El monto del abono al prestamo debe de ser negativo")
-                    else:
-                        # Realiza el abono al prestamo
-                        abono = prestamo.abono_ids.create({'detalle': self.name, 'monto': abs(line.price_unit), 'prestamo_id': prestamo.id})
-                        # Imprimir el abono al prestamo automaticamente
-                        return abono.env.ref('prestamos.custom_report_abono').report_action(abono)
 
     
     @api.multi
     def button_confirm(self):
         super(purchase_order, self).button_confirm()
-        if self.prestamo_info > 0 :
+        if self.prestamo_saldo > 0 :
             prestamo= self.env['prestamo'].search([['tipo', '=', 'cliente'], ['state', '=', 'abierto'], ['cliente_id.id', '=', self.partner_id.id]])
             for line in self.order_line:
                 if line.product_id.name == "Prestamo" and line.price_unit > 0:
@@ -51,7 +35,7 @@ class purchase_order(models.Model):
     @api.one
     def action_take_picture(self):
         super().action_take_picture()
-        if self.prestamo_info > 0 and self.agregar_linea_prestamo == False:
+        if self.prestamo_saldo > 0 and self.agregar_linea_prestamo == False:
             prestamo= self.env['prestamo'].search([['tipo', '=', 'cliente'], ['state', '=', 'abierto'], ['cliente_id.id', '=', self.partner_id.id]])
 
             if prestamo and self.agregar_linea_prestamo == False:
@@ -66,9 +50,11 @@ class purchase_order(models.Model):
                 self.order_line.create({'product_id': str(res.id), 'price_unit':str(-abs(monto_abono)), 'order_id' : self.id, 'name': '[PR] Prestamo','calcular': False, 'date_planned': str(fields.Date.today()), 'product_qty': 1, 'product_uom': str(res.uom_po_id.id)})
                 self.agregar_linea_prestamo = True
 
-    # Consultar si el proveedor tiene prestamo            
+    # Consultar si el proveedor tiene prestamo  
+    @api.one          
     @api.depends('partner_id')
-    def _action_prestamo_info(self):
+    def _action_prestamo_saldo(self):
         prestamo= self.env['prestamo'].search([['tipo', '=', 'cliente'], ['state', '=', 'abierto'], ['cliente_id.id', '=', self.partner_id.id]])
         if prestamo :
-            self.prestamo_info = prestamo[0].saldo
+            self.prestamo_saldo = prestamo[0].saldo
+            self.prestamo_total = prestamo[0].monto
